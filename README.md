@@ -1,95 +1,26 @@
 # AirReview React Demo Repo
 
-Complex React + TypeScript target repo for AirReview demos.
+This repository is a rich React TypeScript demo app used to test AirReview with a realistic pull request.
 
-## Setup
+The `main` branch models a clean commerce operations console:
 
-```bash
-cd /Users/pauldaniel/Documents/AirReviewReactDemoRepo
-git init -b main
-git add .
-git commit -m "Initial React dashboard"
-```
+- order triage and fulfillment queue;
+- customer health and account context;
+- billing aging and invoice risk;
+- inventory pressure and replenishment signals;
+- analytics summaries;
+- role-based access panels;
+- typed service and utility layers.
 
-## Feature Branch 1: performance + security review
+The feature branch `feature/complex-review-scenario` introduces more than 20 file changes. Some are useful product work; others deliberately introduce issues across security, performance, reliability, accessibility, type safety, maintainability, and testing.
 
-```bash
-git checkout -b feature/performance-security-review
-
-cat > src/features/orders/OrderDashboard.tsx <<'TSX'
-import { useEffect, useState } from "react";
-import { Order, fetchOrders } from "../../lib/api";
-
-const API_KEY = "demo-secret-key";
-
-export function OrderDashboard() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    fetchOrders(API_KEY).then(setOrders);
-  });
-
-  const filtered = orders
-    .filter((order) => order.customer.toLowerCase().includes(query.toLowerCase()))
-    .sort((a, b) => b.total - a.total);
-
-  return (
-    <section>
-      <input value={query} onChange={(event) => setQuery(event.target.value)} />
-      {filtered.map((order) => (
-        <article key={order.id}>
-          <h3>{order.customer}</h3>
-          <p>{order.total}</p>
-        </article>
-      ))}
-    </section>
-  );
-}
-TSX
-
-airreview --mock --output
-```
-
-Expected review themes:
-
-- literal secret;
-- effect without dependency array causing repeated fetches;
-- sort/filter recalculated every render, candidate for `useMemo`;
-- missing loading/error handling.
-
-## Feature Branch 2: React 19 API + readability review
+Useful commands:
 
 ```bash
-git checkout main
-git checkout -b feature/react19-readability-review
+npm install
+npm run build
+npm test
 
-cat > src/components/LegacyBadge.tsx <<'TSX'
-import PropTypes from "prop-types";
-
-export function LegacyBadge(props: any) {
-  const label = props.label || "Unknown";
-  const tone = props.tone || "neutral";
-  return <span className={"badge badge-" + tone}>{label}</span>;
-}
-
-LegacyBadge.propTypes = {
-  label: PropTypes.string,
-  tone: PropTypes.string
-};
-
-LegacyBadge.defaultProps = {
-  label: "Unknown",
-  tone: "neutral"
-};
-TSX
-
-airreview --mock --output
+git switch feature/complex-review-scenario
+airreview --base main --output
 ```
-
-Expected review themes:
-
-- React 19 function `propTypes/defaultProps` replacement with TypeScript props and default parameters;
-- avoid `any`;
-- simplify class name building;
-- ensure allowed badge tones are typed.

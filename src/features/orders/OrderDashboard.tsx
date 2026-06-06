@@ -1,33 +1,62 @@
 import { useMemo, useState } from "react";
-import { Order, useOrders } from "../../lib/api";
+import { DataTable } from "../../components/DataTable";
+import { EmptyState } from "../../components/EmptyState";
+import { RiskBadge } from "../../components/RiskBadge";
+import { StatusPill } from "../../components/StatusPill";
+import { StatCard } from "../../components/StatCard";
+import { Toolbar } from "../../components/Toolbar";
+import { useAsyncResource } from "../../hooks/useAsyncResource";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { formatDate } from "../../lib/date";
+import { formatMoney, sum } from "../../lib/money";
+import { getCustomerName } from "../../services/customerService";
+import { listOrderSummaries } from "../../services/orderService";
 
 export function OrderDashboard() {
-  const { orders, loading } = useOrders();
   const [query, setQuery] = useState("");
-
+  const debouncedQuery = useDebouncedValue(query, 150);
+  const { data, loading, error } = useAsyncResource(listOrderSummaries, []);
+  const rows = data ?? [];
   const filtered = useMemo(() => {
-    return orders.filter((order) => order.customer.toLowerCase().includes(query.toLowerCase()));
-  }, [orders, query]);
-
-  if (loading) {
-    return <p>Loading orders...</p>;
-  }
+    const normalized = debouncedQuery.trim().toLowerCase();
+    if (!normalized) return rows;
+    return rows.filter(({ order }) => order.id.toLowerCase().includes(normalized) || getCustomerName(order.customerId).toLowerCase().includes(normalized));
+  }, [debouncedQuery, rows]);
+  const highRiskOrders = rows.filter(({ order }) => order.riskScore > 70);
+  const totalRevenue = sum(rows.map(({ order }) => order.amount));
 
   return (
-    <section>
-      <h2>Orders</h2>
-      <input
-        aria-label="Search orders"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-      />
-      <ul>
-        {filtered.map((order: Order) => (
-          <li key={order.id}>
-            {order.customer} - {order.total}
-          </li>
-        ))}
-      </ul>
+    <section className="panel">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">Orders</p>
+          <h2>Release and fulfillment queue</h2>
+        </div>
+        <span>{rows.length} orders</span>
+      </div>
+      <div className="stats-grid">
+        <StatCard label="High risk" value={String(highRiskOrders.length)} tone="danger" />
+        <StatCard label="Total value" value={formatMoney(totalRevenue, "USD")} caption="mixed currency demo" />
+        <StatCard label="Queue size" value={String(rows.length)} />
+      </div>
+      <Toolbar query={query} onQueryChange={setQuery} />
+      {loading ? <EmptyState title="Loading orders" body="Fetching operational queue..." /> : null}
+      {error ? <EmptyState title="Could not load orders" body={error} /> : null}
+      {!loading && !filtered.length ? <EmptyState title="No matching orders" body="Try another search term." /> : null}
+      {filtered.length ? (
+        <DataTable
+          rows={filtered}
+          rowKey={({ order }) => order.id}
+          columns={[
+            { key: "id", header: "Order", render: ({ order }) => order.id },
+            { key: "customer", header: "Customer", render: ({ order }) => getCustomerName(order.customerId) },
+            { key: "date", header: "Ship by", render: ({ order }) => formatDate(order.promisedShipDate) },
+            { key: "status", header: "Status", render: ({ order }) => <StatusPill label={order.status} /> },
+            { key: "risk", header: "Risk", render: ({ order }) => <RiskBadge value={order.riskScore} /> },
+            { key: "amount", header: "Amount", render: ({ order }) => formatMoney(order.amount, order.currency) }
+          ]}
+        />
+      ) : null}
     </section>
   );
 }

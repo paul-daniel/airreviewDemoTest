@@ -1,37 +1,16 @@
-import { useEffect, useState } from "react";
-
-export interface Order {
-  id: string;
-  customer: string;
-  total: number;
+export interface ApiResult<T> {
+  data: T;
+  loadedAt: string;
 }
 
-const ORDERS: Order[] = [
-  { id: "ord_1", customer: "Contoso", total: 3200 },
-  { id: "ord_2", customer: "Fabrikam", total: 1800 },
-  { id: "ord_3", customer: "Northwind", total: 4200 }
-];
-
-export async function fetchOrders(): Promise<Order[]> {
-  return Promise.resolve(ORDERS);
+export function delay(ms = 80): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
 }
 
-export function useOrders() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let active = true;
-    fetchOrders().then((items) => {
-      if (active) {
-        setOrders(items);
-        setLoading(false);
-      }
-    });
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  return { orders, loading };
+export async function fromFixture<T>(data: T, ms = 80): Promise<ApiResult<T>> {
+  await delay(ms);
+  return {
+    data,
+    loadedAt: new Date("2026-06-06T09:00:00Z").toISOString()
+  };
 }

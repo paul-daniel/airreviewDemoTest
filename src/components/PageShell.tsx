@@ -1,17 +1,19 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+import { useAppContext } from "../state/AppContext";
 
-interface PageShellProps {
-  children: ReactNode;
-}
+export function PageShell({ children }: { children: ReactNode }) {
+  const { currentUser } = useAppContext();
 
-export function PageShell({ children }: PageShellProps) {
   return (
-    <main className="shell">
-      <header>
-        <h1>Operations dashboard</h1>
-        <p>Review orders, customers, and operational risk.</p>
+    <div className="page-shell">
+      <header className="app-header">
+        <div>
+          <p className="eyebrow">AirOps Console</p>
+          <h1>Commerce operations cockpit</h1>
+        </div>
+        <span className="status-pill">{currentUser.role}</span>
       </header>
-      <div className="content">{children}</div>
-    </main>
+      {children}
+    </div>
   );
 }
