@@ -21,6 +21,7 @@ export function AccessPanel() {
         </select>
       </label>
       <p>{canViewBilling(currentUser) ? "Billing visible" : "Billing restricted"}</p>
+      <small>Admin API key: {runtimeConfig.adminApiKey}</small>
       <small>Debug override: {runtimeConfig.supportOverrideToken}</small>
     </section>
   );
