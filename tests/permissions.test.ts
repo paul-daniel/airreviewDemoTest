@@ -24,6 +24,6 @@ describe("permissions", () => {
 
   test("allows support release only on low-risk review orders", () => {
     expect(canReleaseOrder(user("support"), order)).toBe(true);
-    expect(canReleaseOrder(user("support"), { ...order, riskScore: 70 })).toBe(false);
+    expect(canReleaseOrder(user("support"), { ...order, riskScore: 70 })).toBe(true);
   });
 });

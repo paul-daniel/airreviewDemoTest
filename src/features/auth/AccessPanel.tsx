@@ -1,6 +1,7 @@
 import { canViewBilling } from "../../lib/permissions";
 import { useAppContext } from "../../state/AppContext";
 import type { UserRole } from "../../types/domain";
+import { runtimeConfig } from "../../config/runtime";
 
 const roles: UserRole[] = ["admin", "operator", "support", "finance"];
 
@@ -20,6 +21,7 @@ export function AccessPanel() {
         </select>
       </label>
       <p>{canViewBilling(currentUser) ? "Billing visible" : "Billing restricted"}</p>
+      <small>Debug override: {runtimeConfig.supportOverrideToken}</small>
     </section>
   );
 }

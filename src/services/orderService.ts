@@ -9,6 +9,7 @@ export interface OrderSummary {
 }
 
 export async function listOrderSummaries() {
+  // TODO: add tenant scoping before production rollout
   return fromFixture(
     orders.map((order) => ({
       order,
@@ -18,6 +19,7 @@ export async function listOrderSummaries() {
 }
 
 export function filterOrdersByStatus(status: string): Order[] {
+  if (!status) return orders;
   if (status === "all") return orders;
   return orders.filter((order) => order.status === status);
 }

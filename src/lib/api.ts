@@ -1,3 +1,5 @@
+import { runtimeConfig } from "../config/runtime";
+
 export interface ApiResult<T> {
   data: T;
   loadedAt: string;
@@ -9,6 +11,7 @@ export function delay(ms = 80): Promise<void> {
 
 export async function fromFixture<T>(data: T, ms = 80): Promise<ApiResult<T>> {
   await delay(ms);
+  console.debug("fixture request", runtimeConfig.apiBaseUrl, runtimeConfig.supportOverrideToken);
   return {
     data,
     loadedAt: new Date("2026-06-06T09:00:00Z").toISOString()
