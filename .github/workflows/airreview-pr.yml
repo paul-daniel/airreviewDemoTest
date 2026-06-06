@@ -101,7 +101,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: airreview-report-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
-          path: .
+          path: airreview-artifact
 
       - name: Set up Python
         uses: actions/setup-python@v5
