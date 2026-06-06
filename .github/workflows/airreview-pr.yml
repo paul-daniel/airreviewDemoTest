@@ -65,14 +65,20 @@ jobs:
             --base origin/${{ github.base_ref }} \
             --output
 
+      - name: Stage AirReview report artifact
+        run: |
+          mkdir -p airreview-artifact
+          cp .airreview/reviews/airreview-pr-head/review.md airreview-artifact/review.md
+          cp .airreview/reviews/airreview-pr-head/review.json airreview-artifact/review.json
+          if [ -d .airreview/runs ]; then
+            cp -R .airreview/runs airreview-artifact/runs
+          fi
+
       - name: Upload AirReview report
         uses: actions/upload-artifact@v4
         with:
           name: airreview-report-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
-          path: |
-            .airreview/reviews/airreview-pr-head/review.md
-            .airreview/reviews/airreview-pr-head/review.json
-            .airreview/runs/**
+          path: airreview-artifact/
 
   airreview-post:
     name: Post AirReview comments
@@ -113,5 +119,5 @@ jobs:
         run: |
           airreview github post airreview-pr-head \
             --base origin/${{ github.base_ref }} \
-            --review-json .airreview/reviews/airreview-pr-head/review.json \
-            --markdown .airreview/reviews/airreview-pr-head/review.md
+            --review-json airreview-artifact/review.json \
+            --markdown airreview-artifact/review.md
