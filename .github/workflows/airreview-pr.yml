@@ -51,6 +51,15 @@ jobs:
           FOUNDRY_MODEL: ${{ vars.FOUNDRY_MODEL }}
           AIRREVIEW_AGENT_MODE: ${{ vars.AIRREVIEW_AGENT_MODE }}
           FOUNDRY_API_KEY: ${{ secrets.FOUNDRY_API_KEY }}
+          AIRREVIEW_MAX_FILES_PER_CHUNK: "4"
+          AIRREVIEW_MAX_DIFF_CHARS_PER_CHUNK: "12000"
+          AIRREVIEW_MAX_CHUNKS: "3"
+          AIRREVIEW_STOP_WHEN_BUDGET_EXCEEDED: "true"
+          AIRREVIEW_MAX_FINDINGS: "6"
+          AIRREVIEW_MAX_OUTPUT_TOKENS: "1800"
+          AIRREVIEW_MODEL_RETRIES: "4"
+          AIRREVIEW_RATE_LIMIT_BACKOFF_SECONDS: "12,30,60,90"
+          AIRREVIEW_MODEL_CALL_DELAY_SECONDS: "3"
         run: |
           airreview airreview-pr-head \
             --base origin/${{ github.base_ref }} \
