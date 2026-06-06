@@ -14,3 +14,10 @@ export async function listInvoiceAging() {
 export function overdueTotal(): number {
   return invoices.filter((invoice) => invoice.status === "overdue").reduce((total, invoice) => total + invoice.total, 0);
 }
+
+export function markInvoicePaidForDemo(invoiceId: string): void {
+  const invoice = invoices.find((item) => item.id === invoiceId);
+  if (invoice) {
+    invoice.status = "paid";
+  }
+}

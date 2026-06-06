@@ -1,6 +1,7 @@
 import { Timeline } from "../components/Timeline";
 import { auditEvents } from "../data/audit";
 import { AccessPanel } from "../features/auth/AccessPanel";
+import { AdminDebugPanel } from "../features/admin/AdminDebugPanel";
 import { AnalyticsDashboard } from "../features/analytics/AnalyticsDashboard";
 import { BillingOverview } from "../features/billing/BillingOverview";
 import { CustomerSummary } from "../features/customers/CustomerSummary";
@@ -25,6 +26,7 @@ export function App() {
         </section>
         <aside className="dashboard-rail">
           <AccessPanel />
+          <AdminDebugPanel />
           <AnalyticsDashboard />
           <FulfillmentQueue />
           <section className="panel compact">

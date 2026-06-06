@@ -14,6 +14,14 @@ The `main` branch models a clean commerce operations console:
 
 The feature branch `feature/complex-review-scenario` introduces more than 20 file changes. Some are useful product work; others deliberately introduce issues across security, performance, reliability, accessibility, type safety, maintainability, and testing.
 
+Feature branch review themes:
+
+- new admin debug panel and export flow;
+- support escalation path for order release;
+- larger order/customer/billing datasets;
+- intentionally mixed quality changes across 20+ files;
+- some changes are legitimate product work, others are realistic review findings.
+
 Useful commands:
 
 ```bash

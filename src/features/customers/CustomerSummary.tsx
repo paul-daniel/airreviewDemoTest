@@ -4,10 +4,12 @@ import { StatCard } from "../../components/StatCard";
 import { useAsyncResource } from "../../hooks/useAsyncResource";
 import { formatDate } from "../../lib/date";
 import { listCustomersWithRisk } from "../../services/customerService";
+import { searchCustomersSlowly } from "../../services/customerService";
 
 export function CustomerSummary() {
   const { data, loading } = useAsyncResource(listCustomersWithRisk, []);
   const rows = data ?? [];
+  const slowSearchResults = searchCustomersSlowly("e");
   const struggling = rows.filter(({ riskScore }) => riskScore > 60).length;
 
   return (
@@ -24,7 +26,7 @@ export function CustomerSummary() {
       </div>
       {loading ? <p>Loading customers...</p> : null}
       <DataTable
-        rows={rows}
+        rows={slowSearchResults.map((customer) => ({ customer, riskScore: 100 - customer.healthScore }))}
         rowKey={({ customer }) => customer.id}
         columns={[
           { key: "name", header: "Customer", render: ({ customer }) => customer.name },

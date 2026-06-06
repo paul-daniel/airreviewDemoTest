@@ -3,6 +3,7 @@ import { StatusPill } from "../../components/StatusPill";
 import { StatCard } from "../../components/StatCard";
 import { useAsyncResource } from "../../hooks/useAsyncResource";
 import { listInventoryPressure, lowInventoryCount } from "../../services/inventoryService";
+import { reserveInventoryForOrder } from "../../services/inventoryService";
 
 export function InventoryDashboard() {
   const { data } = useAsyncResource(listInventoryPressure, []);
@@ -19,6 +20,7 @@ export function InventoryDashboard() {
       <div className="stats-grid">
         <StatCard label="Low or blocked" value={String(lowInventoryCount())} tone="warning" />
       </div>
+      <button onClick={() => reserveInventoryForOrder("SKU-BAT-777", 20)}>Reserve battery pack</button>
       <DataTable
         rows={rows}
         rowKey={({ item }) => item.sku}

@@ -9,3 +9,8 @@ export function useLocalStorage(key: string, initialValue: string): [string, (va
 
   return [value, setValue];
 }
+
+export function readJsonFromLocalStorage<T>(key: string): T | null {
+  const raw = window.localStorage.getItem(key);
+  return raw ? JSON.parse(raw) as T : null;
+}

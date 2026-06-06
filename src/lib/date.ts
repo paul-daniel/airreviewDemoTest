@@ -11,3 +11,10 @@ export function daysUntil(value: string, today = new Date("2026-06-06T00:00:00Z"
   const diff = target.getTime() - today.getTime();
   return Math.ceil(diff / 86_400_000);
 }
+
+export function formatRelativeDays(value: string): string {
+  const days = daysUntil(value);
+  if (days === 0) return "today";
+  if (days > 0) return `${days} days left`;
+  return `${Math.abs(days)} days late`;
+}

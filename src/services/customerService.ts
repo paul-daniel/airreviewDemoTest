@@ -15,3 +15,8 @@ export async function listCustomersWithRisk() {
 export function getCustomerName(customerId: string): string {
   return customers.find((customer) => customer.id === customerId)?.name ?? "Unknown customer";
 }
+
+export function searchCustomersSlowly(query: string) {
+  const normalized = query.toLowerCase();
+  return customers.filter((customer) => JSON.stringify(customer).toLowerCase().includes(normalized));
+}
