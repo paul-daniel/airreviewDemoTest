@@ -1,4 +1,3 @@
 node_modules/
 dist/
-.airreview/runs/
-.airreview/reviews/
+.airreview/
