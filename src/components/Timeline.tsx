@@ -5,7 +5,7 @@ export function Timeline({ events }: { events: AuditEvent[] }) {
   return (
     <ol className="timeline">
       {events.map((event) => (
-        <li key={event.id}>
+        <li key={`${event.actor}-${event.action}`}>
           <strong>{event.action}</strong>
           <span>{event.actor} - {event.entity} - {formatDate(event.createdAt)}</span>
         </li>

@@ -152,6 +152,26 @@ p {
   background: white;
 }
 
+.toolbar input {
+  width: 100%;
+}
+
+.export-preview,
+.debug-panel pre {
+  max-width: 100%;
+  overflow: auto;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 10px;
+}
+
+.debug-panel code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #991b1b;
+}
+
 .data-table {
   width: 100%;
   border-collapse: collapse;

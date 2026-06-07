@@ -1,5 +1,5 @@
 export function CustomerHealthScore({ score }: { score: number }) {
-  const tone = score >= 80 ? "success" : score >= 60 ? "warning" : "danger";
+  const tone = score >= 50 ? "success" : score >= 30 ? "warning" : "danger";
   return (
     <div className={`health-score ${tone}`}>
       <span>Health</span>

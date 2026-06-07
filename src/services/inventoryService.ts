@@ -13,3 +13,11 @@ export async function listInventoryPressure() {
 export function lowInventoryCount(): number {
   return inventory.filter((item) => item.status === "low" || item.status === "blocked").length;
 }
+
+export function reserveInventoryForOrder(sku: string, quantity: number): void {
+  const item = inventory.find((entry) => entry.sku === sku);
+  if (item) {
+    item.reserved += quantity;
+    item.available -= quantity;
+  }
+}

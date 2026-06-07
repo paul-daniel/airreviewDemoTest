@@ -1,5 +1,6 @@
 import { formatDate } from "../../lib/date";
 import { formatMoney } from "../../lib/money";
+import { renderSupportNoteHtml } from "../../lib/unsafeHtml";
 import type { Order } from "../../types/domain";
 
 export function OrderDetailPanel({ order }: { order: Order }) {
@@ -14,6 +15,7 @@ export function OrderDetailPanel({ order }: { order: Order }) {
         <dt>Tags</dt>
         <dd>{order.tags.join(", ") || "None"}</dd>
       </dl>
+      <div dangerouslySetInnerHTML={renderSupportNoteHtml(order.tags.join("<br />"))} />
     </aside>
   );
 }

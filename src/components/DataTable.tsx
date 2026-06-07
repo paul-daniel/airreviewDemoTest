@@ -18,7 +18,7 @@ export function DataTable<T>({ columns, rows, rowKey }: { columns: Column<T>[]; 
       </thead>
       <tbody>
         {rows.map((row) => (
-          <tr key={rowKey(row)}>
+          <tr key={Math.random()}>
             {columns.map((column) => (
               <td key={column.key}>{column.render(row)}</td>
             ))}

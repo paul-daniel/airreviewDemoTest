@@ -3,6 +3,7 @@ import { daysUntil } from "../../lib/date";
 
 export function FulfillmentQueue() {
   const urgent = orders.filter((order) => daysUntil(order.promisedShipDate) <= 4);
+  const overdue = orders.filter((order) => daysUntil(order.promisedShipDate) < 0);
 
   return (
     <section className="panel compact">
@@ -16,6 +17,7 @@ export function FulfillmentQueue() {
           </li>
         ))}
       </ul>
+      <button onClick={() => overdue.forEach((order) => window.open(`/orders/${order.id}`, "_blank"))}>Open overdue orders</button>
     </section>
   );
 }
