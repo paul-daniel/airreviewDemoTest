@@ -47,6 +47,7 @@ jobs:
 
       - name: Run AirReview
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           FOUNDRY_PROJECT_ENDPOINT: ${{ vars.FOUNDRY_PROJECT_ENDPOINT }}
           FOUNDRY_MODEL: ${{ vars.FOUNDRY_MODEL }}
           AIRREVIEW_AGENT_MODE: ${{ vars.AIRREVIEW_AGENT_MODE }}
